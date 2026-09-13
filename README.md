@@ -8,7 +8,7 @@ The dashboard presents redacted aggregate evidence from the canonical Geomacro b
 
 The live data source is:
 
-`https://geomacro.live/api/testnet/dashboard?days=30`
+`(https://blocknine0.github.io/geomacro-testnet-dashboard/)`
 
 The frontend supports rolling 7-day, 30-day and 90-day windows.
 
