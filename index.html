@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#07070b" />
+  <meta name="description" content="Public read-only operational dashboard for the Geomacro Testnet Developer API." />
+  <title>Geomacro · Testnet Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#07070b;--panel:rgba(255,255,255,.035);--panel-2:rgba(255,255,255,.055);--line:rgba(255,255,255,.09);
+      --text:#f4f4f7;--muted:#92929f;--muted2:#676775;--green:#34d399;--amber:#f59e0b;--red:#fb7185;
+      --blue:#38bdf8;--purple:#a78bfa;--cyan:#22d3ee;--mono:"JetBrains Mono",monospace;--sans:"Inter",sans-serif;
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(900px 520px at 10% -5%,rgba(56,189,248,.08),transparent 60%),radial-gradient(760px 520px at 92% 2%,rgba(167,139,250,.07),transparent 60%),radial-gradient(900px 620px at 48% 100%,rgba(52,211,153,.035),transparent 62%)}
+    a{color:inherit}.shell{position:relative;max-width:1240px;margin:auto;padding:42px 24px 88px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:11px;text-decoration:none}.mark{width:34px;height:34px;border:1px solid rgba(255,255,255,.12);border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.035);font:700 13px var(--mono);letter-spacing:-.06em}.brand-text{font-weight:800;letter-spacing:-.04em;font-size:18px}.brand-sub{font:10px var(--mono);color:var(--muted2);letter-spacing:.09em;text-transform:uppercase;margin-top:1px}
+    .status{display:flex;gap:8px;align-items:center;font:10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--green);border:1px solid rgba(52,211,153,.24);background:rgba(52,211,153,.075);padding:8px 12px;border-radius:999px}.status i{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 14px currentColor}
+    .hero{padding:54px 0 12px}.eyebrow{font:10.5px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}h1{margin:11px 0 0;font-size:clamp(38px,6vw,64px);letter-spacing:-.055em;line-height:1.01;max-width:880px}.lede{font-size:15px;color:var(--muted);line-height:1.75;max-width:840px;margin:20px 0 0}
+    .toolbar{margin-top:24px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.btn,.seg button{border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--text);font:11px var(--mono);padding:9px 12px;border-radius:999px;cursor:pointer;text-decoration:none}.btn:hover,.seg button:hover{background:rgba(255,255,255,.06)}.seg{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:rgba(255,255,255,.025)}.seg button{border:0;padding:7px 10px;background:transparent;color:var(--muted)}.seg button.active{background:rgba(255,255,255,.08);color:var(--text)}.updated{font:10.5px var(--mono);color:var(--muted);margin-left:auto}
+    section{margin-top:42px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;flex-wrap:wrap}.section-head h2{font-size:19px;margin:0;letter-spacing:-.025em}.section-sub{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}.grid{display:grid;gap:13px;margin-top:17px}.grid.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.two{grid-template-columns:1fr}.grid.three{grid-template-columns:1fr}.card{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:18px;min-width:0}.card.glow{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.025))}.label{font:10px var(--mono);letter-spacing:.085em;text-transform:uppercase;color:var(--muted2)}.value{font:650 27px var(--mono);margin-top:10px;letter-spacing:-.04em}.value.small{font-size:18px}.hint{font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:6px}.good{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.blue{color:var(--blue)}.neutral{color:#c4c4ce}.bar{height:6px;background:rgba(255,255,255,.07);border-radius:999px;overflow:hidden;margin-top:12px}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:999px;transition:width .25s ease}
+    .chart{margin-top:17px;border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px;min-height:250px}.chart-head{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:12px}.chart-title{font-size:12px;font-weight:600}.chart-meta{font:10px var(--mono);color:var(--muted)}svg{width:100%;height:200px;overflow:visible}.axis{stroke:rgba(255,255,255,.08);stroke-width:1}.line-success{fill:none;stroke:var(--green);stroke-width:2.3}.line-fail{fill:none;stroke:var(--red);stroke-width:1.8}.dot-success{fill:var(--green)}.dot-fail{fill:var(--red)}
+    .table-wrap{margin-top:17px;border:1px solid var(--line);border-radius:16px;overflow:auto;background:rgba(255,255,255,.02)}table{width:100%;border-collapse:collapse;min-width:920px}th,td{padding:12px 13px;border-bottom:1px solid rgba(255,255,255,.06);font-size:11.5px;text-align:left;vertical-align:middle}th{font:10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.025);position:sticky;top:0}tr:last-child td{border-bottom:0}.mono{font-family:var(--mono)}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 8px;font:10px var(--mono)}.pill.ok{border-color:rgba(52,211,153,.22);color:var(--green);background:rgba(52,211,153,.06)}.pill.fail{border-color:rgba(251,113,133,.22);color:var(--red);background:rgba(251,113,133,.055)}.pill.dim{color:var(--muted)}
+    .contract{display:grid;gap:10px}.kv{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px}.kv:last-child{border-bottom:0}.kv span:first-child{color:var(--muted);font-family:var(--mono)}.kv b{text-align:right}.chain{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)}.chain:last-child{border-bottom:0}.chain-name{font-weight:600;font-size:12px}.chain-meta{font:10px var(--mono);color:var(--muted);margin-top:4px}.chain-value{text-align:right}.chain-value b{font:600 16px var(--mono)}.chain-value span{display:block;font-size:10.5px;color:var(--muted);margin-top:3px}
+    .notice{border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:15px 16px;color:var(--muted);font-size:12px;line-height:1.7;margin-top:17px}.notice strong{color:var(--text)}.error{border-color:rgba(251,113,133,.3);color:#fda4af}.loading{font:11px var(--mono);color:var(--muted);margin-top:26px}.footer{margin-top:52px;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted2);font-size:11px;line-height:1.7}.footer a{color:var(--muted);text-decoration:none}.footer a:hover{color:var(--text)}
+    @media(min-width:760px){.grid.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.grid.two{grid-template-columns:1.25fr .75fr}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:640px){.shell{padding:28px 16px 68px}.hero{padding-top:40px}.updated{width:100%;margin-left:0}.grid.kpis{grid-template-columns:1fr 1fr}.value{font-size:23px}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <a class="brand" href="https://geomacro.live" target="_blank" rel="noreferrer">
+        <div class="mark">GM</div>
+        <div><div class="brand-text">Geomacro</div><div class="brand-sub">Global Risk Intelligence</div></div>
+      </a>
+      <div class="status"><i></i><span>Live · Testnet evidence</span></div>
+    </header>
+
+    <div class="hero">
+      <div class="eyebrow">Developer API · Public Testnet</div>
+      <h1>Testnet operations dashboard</h1>
+      <p class="lede">A public, read-only view of Geomacro's wallet-first Developer API testing program: API reliability, Testnet USDC settlement, capability coverage and safety boundaries. Testnet activity is technical proof only and is never reported as commercial revenue.</p>
+      <div class="toolbar">
+        <button class="btn" id="refresh">↻ Refresh</button>
+        <a class="btn" href="https://geomacro.live/testnet-access" target="_blank" rel="noreferrer">Open Testnet API ↗</a>
+        <a class="btn" href="https://github.com/blocknine0/geomacro" target="_blank" rel="noreferrer">Source repo ↗</a>
+        <div class="seg" aria-label="Dashboard time window">
+          <button data-days="7">7D</button><button class="active" data-days="30">30D</button><button data-days="90">90D</button>
+        </div>
+        <span class="updated" id="updated">Waiting for data…</span>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">Loading public Testnet evidence…</div>
+    <div class="notice error" id="error" style="display:none"></div>
+
+    <div id="content" style="display:none">
+      <section>
+        <div class="section-head"><div><h2>Program health</h2><div class="section-sub">Headline evidence for the selected rolling window.</div></div></div>
+        <div class="grid kpis">
+          <div class="card glow"><div class="label">Active testers</div><div class="value" id="activeTesters">—</div><div class="hint" id="verifiedHint">—</div></div>
+          <div class="card glow"><div class="label">API requests</div><div class="value" id="requests">—</div><div class="hint" id="requestHint">—</div></div>
+          <div class="card glow"><div class="label">Success rate</div><div class="value" id="successRate">—</div><div class="bar"><div class="fill" id="successBar"></div></div><div class="hint" id="successHint">—</div></div>
+          <div class="card glow"><div class="label">Avg latency</div><div class="value" id="latency">—</div><div class="hint">End-to-end application latency where measured</div></div>
+          <div class="card"><div class="label">Settled Test USDC</div><div class="value" id="usdc">—</div><div class="hint" id="paymentHint">—</div></div>
+          <div class="card"><div class="label">Credits consumed</div><div class="value" id="credits">—</div><div class="hint">Credits are quota units, not cash or transferable value</div></div>
+          <div class="card"><div class="label">Capability coverage</div><div class="value" id="coverage">—</div><div class="bar"><div class="fill" id="coverageBar"></div></div><div class="hint">Capabilities with at least one successful delivery</div></div>
+          <div class="card"><div class="label">Safety violations</div><div class="value" id="violations">—</div><div class="hint">Execution authorization must remain false throughout Testnet</div></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head"><div><h2>Reliability over time</h2><div class="section-sub">Successful and failed Testnet deliveries by day.</div></div></div>
+        <div class="chart">
+          <div class="chart-head"><span class="chart-title">Daily request outcomes</span><span class="chart-meta" id="chartMeta">—</span></div>
+          <svg id="trend" viewBox="0 0 1000 200" preserveAspectRatio="none" role="img" aria-label="Daily Testnet request trend"></svg>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head"><div><h2>Capability matrix</h2><div class="section-sub">Usage, reliability and latency across all current Testnet capabilities.</div></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Capability</th><th>Credit cost</th><th>Requests</th><th>Success</th><th>Avg latency</th><th>Signed GRO</th><th>Risk Gate</th></tr></thead><tbody id="capabilityRows"></tbody></table></div>
+      </section>
+
+      <section>
+        <div class="grid two">
+          <div>
+            <div class="section-head"><div><h2>Recent API activity</h2><div class="section-sub">Privacy-safe operational events. No wallet, request ID, subject or query is exposed.</div></div></div>
+            <div class="table-wrap"><table><thead><tr><th>Time</th><th>Capability</th><th>Status</th><th>Latency</th><th>Credits</th><th>Surface</th></tr></thead><tbody id="activityRows"></tbody></table></div>
+          </div>
+          <div>
+            <div class="section-head"><div><h2>Testnet payment rails</h2><div class="section-sub">Direct pay-per-call USDC settlement only.</div></div></div>
+            <div class="card contract" id="chainCards"></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="grid two">
+          <div>
+            <div class="section-head"><div><h2>Recent settlements</h2><div class="section-sub">Transaction hashes and payer identity remain private on this dashboard.</div></div></div>
+            <div class="table-wrap"><table><thead><tr><th>Time</th><th>Network</th><th>Status</th><th>Amount</th><th>Reconciliation</th></tr></thead><tbody id="paymentRows"></tbody></table></div>
+          </div>
+          <div>
+            <div class="section-head"><div><h2>Program contract</h2><div class="section-sub">Current public testing rules from the canonical product contract.</div></div></div>
+            <div class="card contract">
+              <div class="kv"><span>Identity</span><b>Wallet-first · EIP-4361</b></div>
+              <div class="kv"><span>Payment model</span><b>Pay per call</b></div>
+              <div class="kv"><span>Asset</span><b>Testnet USDC</b></div>
+              <div class="kv"><span>Credit price</span><b id="creditPrice">—</b></div>
+              <div class="kv"><span>30-day quota</span><b id="quota">—</b></div>
+              <div class="kv"><span>Idempotent replays</span><b id="replays">—</b></div>
+              <div class="kv"><span>Revenue classification</span><b>Testnet non-revenue</b></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head"><div><h2>Evidence boundaries</h2><div class="section-sub">The dashboard is deliberately narrower than Geomacro's internal operations ledger.</div></div></div>
+        <div class="notice"><strong>Public and read-only.</strong> Tester identity, wallet address, transaction hash, request ID, subject/query text, raw credentials, raw request bodies and upstream news-source identity are not returned by the dashboard feed. Testnet payments are non-revenue. Risk Gate output never authorizes downstream execution.</div>
+      </section>
+    </div>
+
+    <footer class="footer">
+      <span>Source of truth: Geomacro canonical backend and redacted Testnet operations feed.</span>
+      <span><a href="https://geomacro.live/api/testnet/dashboard?days=30" target="_blank" rel="noreferrer">Public JSON feed ↗</a> · <a href="https://geomacro.live/docs" target="_blank" rel="noreferrer">Docs ↗</a></span>
+    </footer>
+  </main>
+
+<script>
+const ENDPOINT='https://geomacro.live/api/testnet/dashboard';
+const $=id=>document.getElementById(id);
+let days=30;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n=v=>Number(v??0);
+const pct=v=>v==null?'—':`${Number(v).toFixed(2)}%`;
+const ms=v=>v==null?'—':`${Math.round(Number(v)).toLocaleString()} ms`;
+const when=iso=>new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'}).format(new Date(iso))+' IST';
+const statusPill=ok=>ok?'<span class="pill ok">PASS</span>':'<span class="pill fail">FAIL</span>';
+async function getData(){const r=await fetch(`${ENDPOINT}?days=${days}`,{headers:{Accept:'application/json'}});if(!r.ok)throw new Error(`Dashboard feed returned ${r.status} ${r.statusText}`);const j=await r.json();if(!j?.ok||!j?.data)throw new Error('Dashboard feed returned an invalid payload');return j.data}
+function setValue(id,text,klass=''){const e=$(id);e.textContent=text;e.className=`value ${klass}`.trim()}
+function renderTrend(rows){const svg=$('trend');svg.innerHTML='';const w=1000,h=200,pad=18;if(!rows.length){svg.innerHTML='<text x="20" y="40" fill="#92929f" font-size="14">No request evidence in this window yet.</text>';return}const max=Math.max(1,...rows.flatMap(r=>[n(r.success_count),n(r.failure_count)]));const step=rows.length>1?(w-pad*2)/(rows.length-1):0;const y=v=>h-pad-(n(v)/max)*(h-pad*2);const pts=(key)=>rows.map((r,i)=>`${pad+i*step},${y(r[key])}`).join(' ');for(let i=0;i<4;i++){const yy=pad+((h-pad*2)/3)*i;const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',pad);l.setAttribute('x2',w-pad);l.setAttribute('y1',yy);l.setAttribute('y2',yy);l.setAttribute('class','axis');svg.appendChild(l)}const success=document.createElementNS('http://www.w3.org/2000/svg','polyline');success.setAttribute('points',pts('success_count'));success.setAttribute('class','line-success');svg.appendChild(success);const fail=document.createElementNS('http://www.w3.org/2000/svg','polyline');fail.setAttribute('points',pts('failure_count'));fail.setAttribute('class','line-fail');svg.appendChild(fail);$('chartMeta').textContent=`${rows.length} day${rows.length===1?'':'s'} · peak ${max.toLocaleString()} requests/day`}
+function render(data){const o=data.overview;setValue('activeTesters',n(o.active_testers).toLocaleString(),n(o.active_testers)>0?'good':'neutral');$('verifiedHint').textContent=`${n(o.verified_testers).toLocaleString()} verified wallet${n(o.verified_testers)===1?'':'s'} · ${n(o.enabled_developer_credentials)} active credential${n(o.enabled_developer_credentials)===1?'':'s'}`;setValue('requests',n(o.request_count).toLocaleString(),'blue');$('requestHint').textContent=`${n(o.success_count).toLocaleString()} successful · ${n(o.failure_count).toLocaleString()} failed`;setValue('successRate',pct(o.success_rate_pct),o.success_rate_pct==null?'neutral':n(o.success_rate_pct)>=99?'good':n(o.success_rate_pct)>=95?'warn':'bad');$('successBar').style.width=`${Math.max(0,Math.min(100,n(o.success_rate_pct)))}%`;$('successHint').textContent=o.request_count?`${n(o.failure_count).toLocaleString()} failed delivery${n(o.failure_count)===1?'':'ies'}`:'No requests recorded in this window';setValue('latency',ms(o.avg_latency_ms),'neutral');setValue('usdc',`${n(o.settled_test_usdc).toLocaleString(undefined,{maximumFractionDigits:6})} USDC`,n(o.settled_payment_count)>0?'good':'neutral');$('paymentHint').textContent=`${n(o.settled_payment_count)} settled · ${n(o.failed_payment_count)} failed · Testnet only`;setValue('credits',n(o.credits_charged).toLocaleString(),'neutral');const cov=o.capability_coverage||{passed:0,total:8};setValue('coverage',`${n(cov.passed)} / ${n(cov.total)}`,n(cov.passed)===n(cov.total)&&n(cov.total)>0?'good':'warn');$('coverageBar').style.width=`${n(cov.total)?Math.min(100,n(cov.passed)/n(cov.total)*100):0}%`;const violations=n(o.execution_authorized_violation_count)+n(o.reconciliation_mismatch_count);setValue('violations',violations.toLocaleString(),violations===0?'good':'bad');$('creditPrice').textContent=`${n(data.program.credit_price_testnet_usdc)} Test USDC / credit`;$('quota').textContent=`${n(data.program.max_credits_per_30_days).toLocaleString()} credits / 30 days`;$('replays').textContent=n(o.idempotent_replay_count).toLocaleString();renderTrend(data.daily||[]);
+$('capabilityRows').innerHTML=(data.by_capability||[]).map(r=>`<tr><td class="mono">${esc(r.capability)}</td><td>${n(r.credit_cost)}</td><td>${n(r.request_count).toLocaleString()}</td><td>${pct(r.success_rate_pct)}</td><td>${ms(r.avg_latency_ms)}</td><td>${n(r.signed_risk_object_count).toLocaleString()}</td><td>${n(r.risk_gate_count).toLocaleString()}</td></tr>`).join('')||'<tr><td colspan="7">No capability usage recorded yet.</td></tr>';
+$('activityRows').innerHTML=(data.recent_activity||[]).map(r=>`<tr><td class="mono">${esc(when(r.occurred_at))}</td><td class="mono">${esc(r.capability)}</td><td>${statusPill(!!r.success)}</td><td>${ms(r.latency_ms)}</td><td>${n(r.credits_charged)}</td><td class="mono">${esc(r.access_surface)}</td></tr>`).join('')||'<tr><td colspan="6">No recent API activity.</td></tr>';
+const chainMap=new Map((data.by_chain||[]).map(x=>[x.network_name,x]));$('chainCards').innerHTML=(data.program.supported_chains||[]).map(c=>{const x=chainMap.get(c.name)||{};return `<div class="chain"><div><div class="chain-name">${esc(c.name)}</div><div class="chain-meta">chain ${esc(c.chain_id)}</div></div><div class="chain-value"><b>${n(x.settled_count).toLocaleString()}</b><span>${n(x.amount_usdc).toLocaleString(undefined,{maximumFractionDigits:6})} Test USDC</span></div></div>`}).join('')||'<div class="hint">No supported chains reported.</div>';
+$('paymentRows').innerHTML=(data.recent_payments||[]).map(r=>`<tr><td class="mono">${esc(when(r.occurred_at))}</td><td>${esc(r.network_name||'—')}</td><td>${r.payment_status==='settled'?'<span class="pill ok">SETTLED</span>':`<span class="pill dim">${esc(r.payment_status||'—')}</span>`}</td><td>${n(r.amount_decimal).toLocaleString(undefined,{maximumFractionDigits:6})} ${esc(r.asset_symbol||'')}</td><td class="mono">${esc(r.reconciliation_status||'—')}</td></tr>`).join('')||'<tr><td colspan="5">No recent settlements.</td></tr>';
+$('updated').textContent=`Updated ${when(data.generated_at)} · ${days}D window`}
+async function load(){ $('loading').style.display='block';$('error').style.display='none';try{const data=await getData();render(data);$('content').style.display='block'}catch(err){$('error').textContent=`Unable to load live dashboard data. ${err?.message||err}`;$('error').style.display='block'}finally{$('loading').style.display='none'}}
+$('refresh').addEventListener('click',load);document.querySelectorAll('[data-days]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-days]').forEach(x=>x.classList.remove('active'));b.classList.add('active');days=Number(b.dataset.days);load()}));load();setInterval(load,300000);
+</script>
+</body>
+</html>
